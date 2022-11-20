@@ -90,20 +90,20 @@ resource "azurerm_storage_account" "mystorageaccount" {
 }
 
 # Create (and display) an SSH key
-resource "tls_private_key" "example_ssh" {
+resource "tls_private_key" "vmkali001_ssh" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
 # Accepting T&C Marketplace Image
-resource "azurerm_marketplace_agreement" "kali-linux" {
-  publisher = "kali-linux"
-  offer     = "kali-linux"
-  plan      = "kali"
-}
+#resource "azurerm_marketplace_agreement" "kali-linux-azurerm_marketplace_agreement" {
+#  publisher = "kali-linux"
+#  offer     = "kali-linux"
+#  plan      = "kali"
+#}
 
 # Create virtual machine
-resource "azurerm_linux_virtual_machine" "myterraformvm" {
+resource "azurerm_linux_virtual_machine" "vmkali001" {
   name                  = "vmkali001"
   location              = azurerm_resource_group.rg.location
   resource_group_name   = azurerm_resource_group.rg.name
@@ -117,15 +117,15 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   }
 
   plan {
-    name                 = "kali"
-    publisher            = "kali-linux"
-    product              = "kali-linux"
+    name                 = "Ubuntu"
+    publisher            = "Canonical"
+    product              = "0001-com-ubuntu-server-jammy"
   }
 
   source_image_reference {
-    publisher = "kali-linux"
-    offer     = "kali-linux"
-    sku       = "kali"
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "19.04"
     version   = "latest"
   }
 
@@ -135,7 +135,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
   admin_ssh_key {
     username   = "kali_admin"
-    public_key = tls_private_key.example_ssh.public_key_openssh
+    public_key = tls_private_key.vmkali001_ssh.public_key_openssh
   }
 
   boot_diagnostics {
